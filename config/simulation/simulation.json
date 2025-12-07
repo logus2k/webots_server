@@ -1,0 +1,10 @@
+{
+  "server": "logus2k.com/webots_simulation_server",
+  "ssl": false,
+  "port": 2000,
+  "portRewrite": false,
+  "docker": true,
+  "webotsHome": "/usr/local/webots",
+  "logDir": "log/",
+  "debug": true
+}
