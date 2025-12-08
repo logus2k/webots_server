@@ -1,10 +1,20 @@
 {
   "server": "logus2k.com/webots_simulation_server",
-  "ssl": false,
+  "ssl": true,
   "port": 2000,
-  "portRewrite": false,
+  "portRewrite": true,
   "docker": true,
   "webotsHome": "/usr/local/webots",
   "logDir": "log/",
-  "debug": true
+  "debug": true,
+  "instancesPath": "/home/logus/env/assets/webots_server/instances",
+  "projectsDir": "/usr/local/webots",
+  "webots": "/usr/local/webots/webots",
+  "timeout": 300,
+  "maxConnections": 100,
+  "shareIdleTime": 50,
+  "allowedRepositories": [
+    "https://github.com/cyberbotics/",
+    "https://github.com/logus2k/"
+  ]
 }

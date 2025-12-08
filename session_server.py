@@ -65,7 +65,8 @@ class SessionHandler(tornado.web.RequestHandler):
                 minimum = simulation_server_loads[i]
                 minimally_loaded_server = config['simulationServers'][i]
         if minimum < LOAD_THRESHOLD:
-            protocol = 'wss:' if config['ssl'] else 'ws:'
+            # protocol = 'wss:' if config['ssl'] else 'ws:'
+            protocol = 'wss:'
             self.write(protocol + '//' + minimally_loaded_server)
             return
         self.write('Error: no simulation server available at the moment.')

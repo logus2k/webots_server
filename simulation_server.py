@@ -267,11 +267,18 @@ class Client:
                 os.chdir(self.project_instance_path)
                 with open(world) as world_file:
                     version = world_file.readline().split()[1]
+
+
                 webots_default_image = f'cyberbotics/webots.cloud:{version}-ubuntu'
+                webots_default_image = f'cyberbotics/webots.cloud:R2025a-ubuntu22.04'
                 if version[0] == 'R' and (int(version[1:5]) < 2023 or version == "R2023a"):
                     webots_default_image += '20.04'
                 else:
                     webots_default_image += '22.04'
+
+                webots_default_image = f'cyberbotics/webots.cloud:R2025a-ubuntu22.04'
+
+
                 makeProject = int(os.path.isfile('Makefile'))
                 webotsCommand = '\"' + webotsCommand.replace('\"', '\\"') + f'{config["projectsDir"]}/worlds/{self.world}\"'
                 envVarDocker = {
@@ -393,10 +400,26 @@ class Client:
                 if line.startswith('.'):  # Webots world is loaded, ready to receive connections
                     logging.info('Webots world is loaded, ready to receive connections')
                     break
+
+
+
             hostname = config['server']
             protocol = 'wss:' if config['ssl'] else 'ws:'
-            separator = '/' if config['portRewrite'] else ':'
-            message = f'webots:{protocol}//{hostname}{separator}{port}'
+
+            logging.info(f'DEBUG: hostname={hostname}, portRewrite={config["portRewrite"]}, ssl={config["ssl"]}')
+
+            if config['portRewrite']:
+                # hostname already includes the path like "logus2k.com/webots_simulation_server"
+                message = f'webots:{protocol}//{hostname}/{port}'
+            else:
+                # For port-based routing, strip any path from hostname
+                hostname_only = hostname.split('/')[0]
+                message = f'webots:{protocol}//{hostname_only}:{port}'
+
+            logging.info(f'DEBUG: Sending streaming URL: {message}')
+
+
+
             client.websocket.write_message(message)
             for line in iter(client.webots_process.stdout.readline, b''):
                 if client.webots_process is None:

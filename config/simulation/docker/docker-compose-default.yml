@@ -4,10 +4,10 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        - WEBOTS_DEFAULT_IMAGE="cyberbotics/webots.cloud:R2025a-ubuntu22.04"
-        - PROJECT_PATH="/usr/local/webots"
-        - MAKE="make"
-    command: $WEBOTS
+        WEBOTS_DEFAULT_IMAGE: ${IMAGE}
+        PROJECT_PATH: ${PROJECT_PATH}
+        MAKE: ${MAKE}
+    command: ${WEBOTS}
     deploy:
       resources:
         reservations:
@@ -15,18 +15,18 @@ services:
             - capabilities:
                 - gpu
     environment:
-      - DISPLAY=:0
+      - DISPLAY=${DISPLAY:-:0}
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all
     ports:
-      - "2000:2000"
-    stdin_open: true # docker run -i
-    tty: true # docker run -t
+      - "${PORT}:${PORT}"
+    stdin_open: true
+    tty: true
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:ro
       - /dev/dri:/dev/dri:rw
     networks:
-      - logus2k_network      
+      - logus2k_network
 
 networks:
   logus2k_network:
